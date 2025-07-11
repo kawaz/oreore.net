@@ -1,5 +1,5 @@
 {
 	"domain": "*.oreore.net",
-	"certUrl": "https://acme-v02.api.letsencrypt.org/acme/cert/05b996cb574ef9ec38870b96e408c1cb4ef3",
-	"certStableUrl": "https://acme-v02.api.letsencrypt.org/acme/cert/05b996cb574ef9ec38870b96e408c1cb4ef3"
+	"certUrl": "https://acme-v02.api.letsencrypt.org/acme/cert/060e7dbe81a96379b09547289d390bd2ff72",
+	"certStableUrl": "https://acme-v02.api.letsencrypt.org/acme/cert/060e7dbe81a96379b09547289d390bd2ff72"
 }
