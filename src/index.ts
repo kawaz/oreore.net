@@ -1,12 +1,13 @@
 import { Env } from "./env";
 import { siteResponse } from "./site";
-import { siteResponse as darkTerminalResponse } from "./site-dark-terminal";
-import { siteResponse as minimalGradientResponse } from "./site-minimal-gradient";
-import { siteResponse as retroNeonResponse } from "./site-retro-neon";
 import { examples } from "./examples";
 
 export type { Env };
 
+// Design rationale: CORS is fully open because this service distributes
+// shared localhost development certificates. The certificates are not secret
+// (they only work for *.oreore.net which resolves to 127.0.0.1) and must be
+// fetchable from any origin (e.g., dev servers, CI pipelines).
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
 };
@@ -54,21 +55,6 @@ export default {
 
     if (pathname === "/") {
       return siteResponse();
-    }
-
-    // Design rationale: Temporary preview routes for comparing design candidates.
-    // These will be removed once a design is chosen.
-    if (pathname === "/preview/current") {
-      return siteResponse();
-    }
-    if (pathname === "/preview/dark-terminal") {
-      return darkTerminalResponse();
-    }
-    if (pathname === "/preview/minimal-gradient") {
-      return minimalGradientResponse();
-    }
-    if (pathname === "/preview/retro-neon") {
-      return retroNeonResponse();
     }
 
     if (

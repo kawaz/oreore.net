@@ -3,7 +3,7 @@ import {
   createDnsTxtRecords,
   deleteDnsTxtRecords,
   createDnsUpdater,
-} from "../src/cloudflare-dns";
+} from "../scripts/cloudflare-dns";
 
 const API_TOKEN = "test-api-token";
 const ZONE_ID = "test-zone-id";

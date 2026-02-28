@@ -10,7 +10,7 @@ import {
   GetObjectCommand,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
-import { createDnsUpdater } from "../src/cloudflare-dns";
+import { createDnsUpdater } from "./cloudflare-dns";
 
 const RENEWAL_THRESHOLD_DAYS = 30;
 const MS_PER_DAY = 24 * 60 * 60 * 1000;

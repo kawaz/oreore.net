@@ -79,6 +79,9 @@ echo "$json" | jq -r '.cert' > crt.pem</code></pre>
   </ul>
   <p>Run an example directly:</p>
   <pre><code>bun run &lt;(curl -s https://oreore.net/examples/bun-serve.ts)</code></pre>
+  <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #ddd; color: #999; font-size: 0.85rem; text-align: center;">
+    <a href="https://github.com/kawaz/oreore.net" style="color: #999;">Source on GitHub</a>
+  </footer>
 </body>
 </html>`;
 }
