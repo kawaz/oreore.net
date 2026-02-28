@@ -1,0 +1,22 @@
+{
+  "name": "oreore-net",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1000.0",
+    "@fishballpkg/acme": "latest"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "latest",
+    "@cloudflare/workers-types": "latest",
+    "@vitest/runner": "~3.0",
+    "@vitest/snapshot": "~3.0",
+    "typescript": "latest",
+    "vitest": "~3.0",
+    "wrangler": "4"
+  }
+}

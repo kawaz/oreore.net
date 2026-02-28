@@ -1,0 +1,13 @@
+name = "oreore-net"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+
+routes = [
+  { pattern = "oreore.net", custom_domain = true },
+]
+
+[[r2_buckets]]
+binding = "CERTS"
+bucket_name = "oreore-net-certs"
