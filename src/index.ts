@@ -34,7 +34,7 @@ export default {
   ): Promise<Response> {
     const { pathname } = new URL(request.url);
 
-    if (request.method !== "GET" || !CERT_ENDPOINTS.has(pathname)) {
+    if ((request.method !== "GET" && request.method !== "HEAD") || !CERT_ENDPOINTS.has(pathname)) {
       // Static assets (/, /examples/*, etc.) are handled by Workers Static Assets.
       // Only cert endpoints reach this Worker code.
       return new Response("Not Found", { status: 404 });

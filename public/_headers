@@ -1,0 +1,13 @@
+/examples/*.ts
+  Content-Type: text/plain; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/examples/*.mjs
+  Content-Type: text/javascript; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/examples/*.txt
+  Access-Control-Allow-Origin: *
+
+/*
+  Access-Control-Allow-Origin: *
