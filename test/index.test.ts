@@ -57,16 +57,18 @@ describe("GET /", () => {
   it("includes example links", async () => {
     const response = await fetchWorker("/");
     const body = await response.text();
-    expect(body).toContain('href="/examples/node-https.mjs"');
-    expect(body).toContain('href="/examples/node-http2.mjs"');
-    expect(body).toContain('href="/examples/node-http2-compatibility.mjs"');
+    expect(body).toContain('href="/examples/bun-serve.ts"');
+    expect(body).toContain('href="/examples/deno-serve.ts"');
+    expect(body).toContain('href="/examples/vite.config.ts"');
+    expect(body).toContain('href="/examples/node-hono.mjs"');
+    expect(body).toContain('href="/examples/caddy.txt"');
   });
 
   it("includes curl usage examples", async () => {
     const response = await fetchWorker("/");
     const body = await response.text();
     expect(body).toContain("curl");
-    expect(body).toContain("https://oreore.net/key.pem");
+    expect(body).toContain("https://oreore.net/all.pem.json");
   });
 });
 
@@ -137,29 +139,45 @@ describe("certificate endpoints when R2 is empty", () => {
 });
 
 describe("example endpoints", () => {
-  it("GET /examples/node-https.mjs returns JS content", async () => {
-    const response = await fetchWorker("/examples/node-https.mjs");
+  it("GET /examples/bun-serve.ts returns TypeScript content", async () => {
+    const response = await fetchWorker("/examples/bun-serve.ts");
     expect(response.status).toBe(200);
-    expect(response.headers.get("Content-Type")).toContain("text/javascript");
+    expect(response.headers.get("Content-Type")).toContain("text/typescript");
     expect(response.headers.get("Access-Control-Allow-Origin")).toBe("*");
     const body = await response.text();
-    expect(body).toContain("https.createServer");
+    expect(body).toContain("Bun.serve");
   });
 
-  it("GET /examples/node-http2.mjs returns JS content", async () => {
-    const response = await fetchWorker("/examples/node-http2.mjs");
+  it("GET /examples/deno-serve.ts returns TypeScript content", async () => {
+    const response = await fetchWorker("/examples/deno-serve.ts");
     expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Type")).toContain("text/typescript");
     const body = await response.text();
-    expect(body).toContain("http2.createSecureServer");
-    expect(body).toContain("allowHTTP1: true");
+    expect(body).toContain("Deno.serve");
   });
 
-  it("GET /examples/node-http2-compatibility.mjs returns JS content", async () => {
-    const response = await fetchWorker("/examples/node-http2-compatibility.mjs");
+  it("GET /examples/vite.config.ts returns TypeScript content", async () => {
+    const response = await fetchWorker("/examples/vite.config.ts");
     expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Type")).toContain("text/typescript");
     const body = await response.text();
-    expect(body).toContain("http2.createSecureServer");
-    expect(body).toContain("compatibility");
+    expect(body).toContain("defineConfig");
+  });
+
+  it("GET /examples/node-hono.mjs returns JavaScript content", async () => {
+    const response = await fetchWorker("/examples/node-hono.mjs");
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Type")).toContain("text/javascript");
+    const body = await response.text();
+    expect(body).toContain("Hono");
+  });
+
+  it("GET /examples/caddy.txt returns plain text content", async () => {
+    const response = await fetchWorker("/examples/caddy.txt");
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Type")).toContain("text/plain");
+    const body = await response.text();
+    expect(body).toContain("reverse_proxy");
   });
 
   it("GET /examples/unknown.mjs returns 404", async () => {

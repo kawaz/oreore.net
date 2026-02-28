@@ -69,18 +69,16 @@ export function buildIndexHtml(): string {
   </ul>
 
   <h2>Quick Start</h2>
-  <pre><code>curl -s https://oreore.net/all.pem.json | jq -r '.key' > key.pem
-curl -s https://oreore.net/all.pem.json | jq -r '.cert' > crt.pem</code></pre>
-  <p>Or download individually:</p>
-  <pre><code>curl -s https://oreore.net/key.pem -o key.pem
-curl -s https://oreore.net/crt.pem -o crt.pem</code></pre>
+  <pre><code>json=$(curl -s https://oreore.net/all.pem.json)
+echo "$json" | jq -r '.key' > key.pem
+echo "$json" | jq -r '.cert' > crt.pem</code></pre>
 
-  <h2>Node.js Examples</h2>
+  <h2>Examples</h2>
   <ul>
     ${exampleLinks}
   </ul>
   <p>Run an example directly:</p>
-  <pre><code>node --experimental-default-type=module &lt;(curl -s https://oreore.net/examples/node-https.mjs)</code></pre>
+  <pre><code>bun run &lt;(curl -s https://oreore.net/examples/bun-serve.ts)</code></pre>
 </body>
 </html>`;
 }

@@ -1,5 +1,8 @@
 import { Env } from "./env";
 import { siteResponse } from "./site";
+import { siteResponse as darkTerminalResponse } from "./site-dark-terminal";
+import { siteResponse as minimalGradientResponse } from "./site-minimal-gradient";
+import { siteResponse as retroNeonResponse } from "./site-retro-neon";
 import { examples } from "./examples";
 
 export type { Env };
@@ -53,6 +56,21 @@ export default {
       return siteResponse();
     }
 
+    // Design rationale: Temporary preview routes for comparing design candidates.
+    // These will be removed once a design is chosen.
+    if (pathname === "/preview/current") {
+      return siteResponse();
+    }
+    if (pathname === "/preview/dark-terminal") {
+      return darkTerminalResponse();
+    }
+    if (pathname === "/preview/minimal-gradient") {
+      return minimalGradientResponse();
+    }
+    if (pathname === "/preview/retro-neon") {
+      return retroNeonResponse();
+    }
+
     if (
       pathname === "/all.pem.json" ||
       pathname === "/key.pem" ||
@@ -78,9 +96,15 @@ export default {
     if (exampleMatch) {
       const name = exampleMatch[1];
       if (name in examples) {
+        let contentType = "text/plain; charset=utf-8";
+        if (name.endsWith(".ts")) {
+          contentType = "text/typescript; charset=utf-8";
+        } else if (name.endsWith(".mjs") || name.endsWith(".js")) {
+          contentType = "text/javascript; charset=utf-8";
+        }
         return new Response(examples[name], {
           headers: {
-            "Content-Type": "text/javascript; charset=utf-8",
+            "Content-Type": contentType,
             ...CORS_HEADERS,
           },
         });
