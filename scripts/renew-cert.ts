@@ -113,10 +113,13 @@ async function main() {
 
     const { privateKey } = await CryptoKeyUtils.exportKeyPairToPem(certKeyPair);
 
-    await putR2Text(
-      "all.pem.json",
-      JSON.stringify({ cert: certificate, key: privateKey })
-    );
+    const certJson = JSON.stringify({ cert: certificate, key: privateKey });
+    await Promise.all([
+      putR2Text("all.pem.json", certJson),
+      putR2Text("key.pem", privateKey),
+      putR2Text("crt.pem", certificate),
+      putR2Text("all.pem", certificate + "\n" + privateKey),
+    ]);
 
     console.log("Certificate renewed and uploaded to R2.");
   } finally {

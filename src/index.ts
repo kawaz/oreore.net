@@ -1,6 +1,4 @@
 import { Env } from "./env";
-import { siteResponse } from "./site";
-import { examples } from "./examples";
 
 export type { Env };
 
@@ -12,12 +10,7 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
 };
 
-function unavailableResponse(): Response {
-  return new Response(
-    "Certificate not yet available. Please try again later.",
-    { status: 503, headers: CORS_HEADERS }
-  );
-}
+const CERT_ENDPOINTS = new Set(["/all.pem.json", "/key.pem", "/crt.pem", "/all.pem"]);
 
 async function getCertData(
   env: Env
@@ -27,15 +20,10 @@ async function getCertData(
   return await obj.json();
 }
 
-function textResponse(body: string): Response {
+function corsResponse(body: string, contentType: string, status = 200): Response {
   return new Response(body, {
-    headers: { "Content-Type": "text/plain", ...CORS_HEADERS },
-  });
-}
-
-function jsonResponse(body: string): Response {
-  return new Response(body, {
-    headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+    status,
+    headers: { "Content-Type": contentType, ...CORS_HEADERS },
   });
 }
 
@@ -43,60 +31,35 @@ export default {
   async fetch(
     request: Request,
     env: Env,
-    ctx: ExecutionContext
   ): Promise<Response> {
-    const url = new URL(request.url);
-    const { pathname } = url;
-    const method = request.method;
+    const { pathname } = new URL(request.url);
 
-    if (method !== "GET") {
-      return new Response("Not Found", { status: 404, headers: CORS_HEADERS });
+    if (request.method !== "GET" || !CERT_ENDPOINTS.has(pathname)) {
+      // Static assets (/, /examples/*, etc.) are handled by Workers Static Assets.
+      // Only cert endpoints reach this Worker code.
+      return new Response("Not Found", { status: 404 });
     }
 
-    if (pathname === "/") {
-      return siteResponse();
+    const certData = await getCertData(env);
+    if (certData === null) {
+      return corsResponse(
+        "Certificate not yet available. Please try again later.",
+        "text/plain",
+        503
+      );
     }
 
-    if (
-      pathname === "/all.pem.json" ||
-      pathname === "/key.pem" ||
-      pathname === "/crt.pem" ||
-      pathname === "/all.pem"
-    ) {
-      const certData = await getCertData(env);
-      if (certData === null) return unavailableResponse();
-
-      switch (pathname) {
-        case "/all.pem.json":
-          return jsonResponse(JSON.stringify(certData));
-        case "/key.pem":
-          return textResponse(certData.key);
-        case "/crt.pem":
-          return textResponse(certData.cert);
-        case "/all.pem":
-          return textResponse(certData.cert + "\n" + certData.key);
-      }
+    switch (pathname) {
+      case "/all.pem.json":
+        return corsResponse(JSON.stringify(certData), "application/json");
+      case "/key.pem":
+        return corsResponse(certData.key, "text/plain");
+      case "/crt.pem":
+        return corsResponse(certData.cert, "text/plain");
+      case "/all.pem":
+        return corsResponse(certData.cert + "\n" + certData.key, "text/plain");
+      default:
+        return new Response("Not Found", { status: 404 });
     }
-
-    const exampleMatch = pathname.match(/^\/examples\/(.+)$/);
-    if (exampleMatch) {
-      const name = exampleMatch[1];
-      if (name in examples) {
-        let contentType = "text/plain; charset=utf-8";
-        if (name.endsWith(".ts")) {
-          contentType = "text/typescript; charset=utf-8";
-        } else if (name.endsWith(".mjs") || name.endsWith(".js")) {
-          contentType = "text/javascript; charset=utf-8";
-        }
-        return new Response(examples[name], {
-          headers: {
-            "Content-Type": contentType,
-            ...CORS_HEADERS,
-          },
-        });
-      }
-    }
-
-    return new Response("Not Found", { status: 404, headers: CORS_HEADERS });
   },
 };

@@ -1,11 +1,4 @@
-import { examples } from "./examples";
-
-export function buildIndexHtml(): string {
-  const exampleLinks = Object.keys(examples)
-    .map((name) => `<li><a href="/examples/${name}">${name}</a></li>`)
-    .join("\n          ");
-
-  return `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -63,9 +56,9 @@ export function buildIndexHtml(): string {
   <h2>Certificate Download</h2>
   <ul>
     <li><strong><a href="/all.pem.json">all.pem.json</a></strong> &mdash; JSON format <code>{"cert":"...","key":"..."}</code> (primary)</li>
-    <li><a href="/key.pem">key.pem</a> &mdash; Private key (generated from all.pem.json)</li>
-    <li><a href="/crt.pem">crt.pem</a> &mdash; Certificate chain (generated from all.pem.json)</li>
-    <li><a href="/all.pem">all.pem</a> &mdash; Cert + key concatenated (generated from all.pem.json)</li>
+    <li><a href="/key.pem">key.pem</a> &mdash; Private key</li>
+    <li><a href="/crt.pem">crt.pem</a> &mdash; Certificate chain</li>
+    <li><a href="/all.pem">all.pem</a> &mdash; Cert + key concatenated</li>
   </ul>
 
   <h2>Quick Start</h2>
@@ -75,7 +68,11 @@ echo "$json" | jq -r '.cert' > crt.pem</code></pre>
 
   <h2>Examples</h2>
   <ul>
-    ${exampleLinks}
+    <li><a href="/examples/bun-serve.ts">bun-serve.ts</a></li>
+    <li><a href="/examples/deno-serve.ts">deno-serve.ts</a></li>
+    <li><a href="/examples/vite.config.ts">vite.config.ts</a></li>
+    <li><a href="/examples/node-hono.mjs">node-hono.mjs</a></li>
+    <li><a href="/examples/caddy.txt">caddy.txt</a></li>
   </ul>
   <p>Run an example directly:</p>
   <pre><code>bun run &lt;(curl -s https://oreore.net/examples/bun-serve.ts)</code></pre>
@@ -83,14 +80,4 @@ echo "$json" | jq -r '.cert' > crt.pem</code></pre>
     <a href="https://github.com/kawaz/oreore.net" style="color: #999;">Source on GitHub</a>
   </footer>
 </body>
-</html>`;
-}
-
-export function siteResponse(): Response {
-  return new Response(buildIndexHtml(), {
-    headers: {
-      "Content-Type": "text/html; charset=utf-8",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-}
+</html>

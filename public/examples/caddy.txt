@@ -1,0 +1,10 @@
+# Caddyfile example - reverse proxy with oreore.net certs
+# Download cert bundle and split:
+#   json=$(curl -s https://oreore.net/all.pem.json)
+#   echo "$json" | jq -r '.key' > key.pem
+#   echo "$json" | jq -r '.cert' > crt.pem
+
+myapp.oreore.net:8443 {
+    tls crt.pem key.pem
+    reverse_proxy localhost:3000
+}

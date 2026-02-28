@@ -7,6 +7,9 @@ routes = [
   { pattern = "oreore.net", custom_domain = true },
 ]
 
+[assets]
+directory = "./public"
+
 [[r2_buckets]]
 binding = "CERTS"
 bucket_name = "oreore-net-certs"
